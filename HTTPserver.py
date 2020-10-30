@@ -19,19 +19,28 @@ while True:
     array = request.decode('utf-8').strip().split()
     http_response = str()
     sentence = str()
-
-    if array[1]:
-        url = array[1]
-        if url == '/index.html':
-            http_response = """HTTP/1.1 200 OK\r\n\r\n"""
-            page = open(f'pages/index.html', 'r')
-            sentence = page.read()
-            page.close()
+    if array:
+        print(request.decode('utf-8'))
+        if array[0] == 'GET':
+            if array[1]:
+                url = array[1]
+                if url == '/index.html' or url == '/':
+                    http_response = """HTTP/1.1 200 OK\r\n\r\n"""
+                    page = open(f'pages/index.html', 'r')
+                    sentence = page.read()
+                    page.close()
+                else:
+                    http_response = """HTTP/1.1 404 Not found\r\n\r\n"""
+                    page = open(f'pages/not_found.html', 'r')
+                    sentence = page.read()
+                    page.close()
         else:
-            http_response = """HTTP/1.1 404 Not found\r\n\r\n"""
-            page = open(f'pages/not_found.html', 'r')
+            http_response = """HTTP/1.1 400 Bad Request\r\n\r\n"""
+            page = open(f'pages/bad_request.html', 'r')
             sentence = page.read()
             page.close()
+    else:
+        continue
     client_connection.send((http_response + sentence).encode('utf-8'))
     client_connection.close()
 listen_socket.close()
