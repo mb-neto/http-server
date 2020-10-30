@@ -17,6 +17,8 @@ while True:
     client_connection, client_address = listen_socket.accept()
     request = client_connection.recv(1024)
     array = request.decode('utf-8').split('/')
+    http_response = str()
+    sentence = str()
     if array[1]:
         url = array[1].split()
         if url[0] == 'index.html':
