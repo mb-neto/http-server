@@ -16,11 +16,11 @@ print ('Serving HTTP on port %s ...' % PORT)
 while True:
     client_connection, client_address = listen_socket.accept()
     request = client_connection.recv(1024)
-    array = request.decode('utf-8').split('/')
+    array = request.decode('utf-8').split()
     http_response = str()
     sentence = str()
     if array[1]:
-        url = array[1].split()
+        url = array[1].split('/')
         if url[0] == 'index.html':
             http_response = """HTTP/1.1 200 OK \r \n \r \n"""
             page = open('pages/index.html', 'r')
@@ -31,7 +31,7 @@ while True:
             page = open('pages/not_found.html', 'r')
             sentence = page.read()
             page.close()
-        client_connection.send(http_response.encode('utf-8'))
-        client_connection.send(sentence)
+        print(http_response + sentence)
+        client_connection.send((http_response + sentence).encode('utf-8'))
     client_connection.close()
 listen_socket.close()
